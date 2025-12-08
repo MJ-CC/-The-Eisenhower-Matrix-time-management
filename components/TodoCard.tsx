@@ -9,9 +9,10 @@ interface TodoCardProps extends HTMLAttributes<HTMLDivElement> {
   onDelete: (id: string) => void;
   onUpdate: (id: string, newText: string) => void; // New prop for updating text
   isOverlay?: boolean; // For styling the drag overlay
+  autoEdit?: boolean; // New prop to trigger edit mode automatically
 }
 
-export const TodoCard: React.FC<TodoCardProps> = ({ item, onDelete, onUpdate, isOverlay = false, ...props }) => {
+export const TodoCard: React.FC<TodoCardProps> = ({ item, onDelete, onUpdate, isOverlay = false, autoEdit = false, ...props }) => {
   const {
     attributes,
     listeners,
@@ -21,15 +22,19 @@ export const TodoCard: React.FC<TodoCardProps> = ({ item, onDelete, onUpdate, is
     isDragging,
   } = useSortable({ id: item.id });
 
-  const [isEditing, setIsEditing] = useState(false);
+  // Initialize edit state. If it's an overlay, never start in edit mode.
+  const [isEditing, setIsEditing] = useState(isOverlay ? false : autoEdit);
   const [editText, setEditText] = useState(item.text);
   const inputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     if (isEditing) {
       inputRef.current?.focus();
+      if (autoEdit && !isOverlay) {
+         inputRef.current?.select(); // Select all text if auto-editing (new item)
+      }
     }
-  }, [isEditing]);
+  }, [isEditing, autoEdit, isOverlay]);
 
   const style = {
     transform: CSS.Transform.toString(transform),
