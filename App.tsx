@@ -30,6 +30,8 @@ function App() {
   });
   const [nextId, setNextId] = useState(1); 
   const [activeId, setActiveId] = useState<string | null>(null);
+  // Track the ID of the newly added item to trigger auto-edit
+  const [newlyAddedId, setNewlyAddedId] = useState<string | null>(null);
 
   const sensors = useSensors(
     useSensor(PointerSensor, {
@@ -60,8 +62,9 @@ function App() {
   }, [activeId, findContainer, items]);
 
   const handleAddTodo = useCallback((targetContainer: QuadrantId | 'unassigned' = 'unassigned') => {
+    const newId = `todo-${nextId}`;
     const newItem: TodoItem = {
-      id: `todo-${nextId}`,
+      id: newId,
       text: '新待辦事項',
     };
     setItems((prev) => ({
@@ -69,6 +72,7 @@ function App() {
       [targetContainer]: [...prev[targetContainer], newItem],
     }));
     setNextId((prev) => prev + 1);
+    setNewlyAddedId(newId); // Mark this ID as new to trigger auto-edit
   }, [nextId]);
 
   const handleDeleteTodo = useCallback((idToDelete: string) => {
@@ -91,10 +95,12 @@ function App() {
       }
       return newState;
     });
+    setNewlyAddedId(null); // Clear auto-edit status after update
   }, []);
 
   const handleDragStart = useCallback((event: DragStartEvent) => {
     setActiveId(String(event.active.id));
+    setNewlyAddedId(null); // Clear auto-edit status when dragging starts
   }, []);
 
   const handleDragEnd = useCallback((event: DragEndEvent) => {
@@ -179,6 +185,7 @@ function App() {
               onAddTodo={() => handleAddTodo(QuadrantId.URGENT_IMPORTANT)}
               colorClass="border-red-500 bg-red-50 dark:bg-red-950"
               headerClass="bg-red-500 text-white"
+              newlyAddedId={newlyAddedId}
             />
             <Quadrant
               id={QuadrantId.NOT_URGENT_IMPORTANT}
@@ -190,6 +197,7 @@ function App() {
               onAddTodo={() => handleAddTodo(QuadrantId.NOT_URGENT_IMPORTANT)}
               colorClass="border-green-500 bg-green-50 dark:bg-green-950"
               headerClass="bg-green-500 text-white"
+              newlyAddedId={newlyAddedId}
             />
             <Quadrant
               id={QuadrantId.URGENT_NOT_IMPORTANT}
@@ -201,6 +209,7 @@ function App() {
               onAddTodo={() => handleAddTodo(QuadrantId.URGENT_NOT_IMPORTANT)}
               colorClass="border-yellow-500 bg-yellow-50 dark:bg-yellow-950"
               headerClass="bg-yellow-500 text-gray-800"
+              newlyAddedId={newlyAddedId}
             />
             <Quadrant
               id={QuadrantId.NOT_URGENT_NOT_IMPORTANT}
@@ -212,6 +221,7 @@ function App() {
               onAddTodo={() => handleAddTodo(QuadrantId.NOT_URGENT_NOT_IMPORTANT)}
               colorClass="border-gray-400 bg-gray-50 dark:bg-gray-700"
               headerClass="bg-gray-400 text-white"
+              newlyAddedId={newlyAddedId}
             />
           </SortableContext>
         </div>
@@ -223,6 +233,7 @@ function App() {
             onAddTodo={() => handleAddTodo('unassigned')}
             onDelete={handleDeleteTodo}
             onUpdate={handleUpdateTodo}
+            newlyAddedId={newlyAddedId}
           />
         </div>
 
