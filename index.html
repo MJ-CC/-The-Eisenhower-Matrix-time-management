@@ -1,0 +1,75 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Time Matrix Todo</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+      /* Basic styles for HTML, body to ensure full height */
+      html, body, #root {
+        height: 100%;
+        margin: 0;
+        overflow: hidden; /* Prevent body scroll, App will manage its own scroll */
+      }
+
+      /* Custom Scrollbar Styles */
+      .custom-scrollbar::-webkit-scrollbar {
+        width: 8px;
+        height: 8px;
+      }
+      .custom-scrollbar::-webkit-scrollbar-track {
+        background: #e5e7eb; /* Tailwind gray-200 */
+        border-radius: 10px;
+      }
+      .custom-scrollbar::-webkit-scrollbar-thumb {
+        background: #9ca3af; /* Tailwind gray-400 */
+        border-radius: 10px;
+      }
+      .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+        background: #6b7280; /* Tailwind gray-500 */
+      }
+      /* For Firefox */
+      .custom-scrollbar {
+        scrollbar-width: thin;
+        scrollbar-color: #9ca3af #e5e7eb; /* thumb color track color */
+      }
+
+      /* Dark mode scrollbar */
+      @media (prefers-color-scheme: dark) {
+        .custom-scrollbar::-webkit-scrollbar-track {
+          background: #374151; /* Tailwind gray-700 */
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+          background: #4b5563; /* Tailwind gray-600 */
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+          background: #6b7280; /* Tailwind gray-500 */
+        }
+        .custom-scrollbar {
+          scrollbar-color: #4b5563 #374151; /* thumb color track color */
+        }
+      }
+    </style>
+<script type="importmap">
+{
+  "imports": {
+    "react": "https://aistudiocdn.com/react@^19.2.1",
+    "react-dom/": "https://aistudiocdn.com/react-dom@^19.2.1/",
+    "react/": "https://aistudiocdn.com/react@^19.2.1/",
+    "react-dom": "https://aistudiocdn.com/react-dom@^19.2.1",
+    "@dnd-kit/core": "https://aistudiocdn.com/@dnd-kit/core@^6.3.1",
+    "@dnd-kit/sortable": "https://aistudiocdn.com/@dnd-kit/sortable@^10.0.0",
+    "@dnd-kit/utilities": "https://aistudiocdn.com/@dnd-kit/utilities@^3.2.2"
+  }
+}
+</script>
+<link rel="stylesheet" href="/index.css">
+</head>
+<body>
+    <div id="root"></div>
+    <script type="module" src="/index.tsx"></script>
+</body>
+</html>
