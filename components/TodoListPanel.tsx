@@ -9,10 +9,11 @@ interface TodoListPanelProps {
   items: TodoItem[];
   onAddTodo: () => void;
   onDelete: (id: string) => void;
-  onUpdate: (id: string, newText: string) => void; // New prop
+  onUpdate: (id: string, newText: string) => void;
+  newlyAddedId?: string | null;
 }
 
-export const TodoListPanel: React.FC<TodoListPanelProps> = ({ items, onAddTodo, onDelete, onUpdate }) => {
+export const TodoListPanel: React.FC<TodoListPanelProps> = ({ items, onAddTodo, onDelete, onUpdate, newlyAddedId }) => {
   const { setNodeRef, isOver } = useDroppable({
     id: 'unassigned',
   });
@@ -43,12 +44,20 @@ export const TodoListPanel: React.FC<TodoListPanelProps> = ({ items, onAddTodo, 
       <div className="flex-grow overflow-y-auto custom-scrollbar pr-2 -mr-2">
         <SortableContext id="unassigned" items={itemIds} strategy={verticalListSortingStrategy}>
           {items.map((item) => (
-            <TodoCard key={item.id} item={item} onDelete={onDelete} onUpdate={onUpdate} />
+            <TodoCard 
+              key={item.id} 
+              item={item} 
+              onDelete={onDelete} 
+              onUpdate={onUpdate} 
+              autoEdit={item.id === newlyAddedId}
+            />
           ))}
         </SortableContext>
         {items.length === 0 && (
-          <div className="text-center text-gray-400 dark:text-gray-500 text-xs mt-4 select-none" aria-live="polite">
-            可點擊+或雙擊空白處新增待辦事項
+          <div className="flex flex-col items-center justify-center text-center text-gray-400 dark:text-gray-500 text-xs mt-4 select-none space-y-1" aria-live="polite">
+            <span>可單擊+新增</span>
+            <span>或</span>
+            <span>雙擊空白處新增</span>
           </div>
         )}
       </div>
