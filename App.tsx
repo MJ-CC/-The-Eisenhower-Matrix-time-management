@@ -159,7 +159,7 @@ function App() {
   const allItemIds: string[] = Object.values(items).flatMap((arr) => (arr as TodoItem[]).map((item) => item.id));
 
   return (
-    <div className="flex flex-col lg:flex-row h-screen bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-gray-100 p-4 gap-4">
+    <div className="flex flex-col lg:flex-row h-screen bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-gray-100 p-2 gap-2">
       <DndContext
         sensors={sensors}
         collisionDetection={closestCenter}
@@ -167,7 +167,7 @@ function App() {
         onDragEnd={handleDragEnd}
       >
         {/* Left 2/3 section: Time Matrix */}
-        <div className="lg:w-2/3 w-full grid grid-cols-1 md:grid-cols-2 gap-4 h-full">
+        <div className="lg:w-2/3 w-full grid grid-cols-1 md:grid-cols-2 gap-2 h-full">
           <SortableContext id="all-items" items={allItemIds}>
             <Quadrant
               id={QuadrantId.URGENT_IMPORTANT}
