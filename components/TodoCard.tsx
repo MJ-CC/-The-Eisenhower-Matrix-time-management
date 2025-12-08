@@ -99,7 +99,7 @@ export const TodoCard: React.FC<TodoCardProps> = ({ item, onDelete, onUpdate, is
         dark:bg-gray-700
         text-gray-800
         dark:text-gray-200
-        p-3
+        p-2
         mb-2
         rounded-lg
         shadow-sm
@@ -134,7 +134,7 @@ export const TodoCard: React.FC<TodoCardProps> = ({ item, onDelete, onUpdate, is
             focus:outline-none
             focus:border-blue-600
             dark:focus:border-blue-400
-            text-sm
+            text-xs
             font-medium
             pr-2
           "
@@ -142,7 +142,7 @@ export const TodoCard: React.FC<TodoCardProps> = ({ item, onDelete, onUpdate, is
         />
       ) : (
         <span
-          className="flex-grow text-sm font-medium pr-2 break-words"
+          className="flex-grow text-xs font-medium pr-2 break-words"
           onDoubleClick={handleDoubleClick}
           // Note: We DO NOT stop pointer propagation here so the card can be dragged by the text.
           // The activationConstraint in App.tsx handles the double click detection.
@@ -173,7 +173,7 @@ export const TodoCard: React.FC<TodoCardProps> = ({ item, onDelete, onUpdate, is
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
-            className="h-4 w-4"
+            className="h-3 w-3"
             fill="none"
             viewBox="0 0 24 24"
             stroke="currentColor"
