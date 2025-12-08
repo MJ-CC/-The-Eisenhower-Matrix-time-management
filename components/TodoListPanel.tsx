@@ -22,6 +22,7 @@ export const TodoListPanel: React.FC<TodoListPanelProps> = ({ items, onAddTodo, 
   return (
     <div
       ref={setNodeRef}
+      onDoubleClick={onAddTodo}
       className={`
         relative
         bg-gray-50
@@ -46,19 +47,22 @@ export const TodoListPanel: React.FC<TodoListPanelProps> = ({ items, onAddTodo, 
           ))}
         </SortableContext>
         {items.length === 0 && (
-          <div className="text-center text-gray-400 dark:text-gray-500 text-xs mt-4" aria-live="polite">
-            目前沒有待辦事項。
+          <div className="text-center text-gray-400 dark:text-gray-500 text-xs mt-4 select-none" aria-live="polite">
+            可點擊+或雙擊空白處新增待辦事項
           </div>
         )}
       </div>
       {/* New hint message */}
       {items.length > 0 && (
-        <p className="text-center text-gray-500 dark:text-gray-400 text-[10px] mt-2">
+        <p className="text-center text-gray-500 dark:text-gray-400 text-[10px] mt-2 select-none">
           雙擊修改內容
         </p>
       )}
       <button
-        onClick={onAddTodo}
+        onClick={(e) => {
+          e.stopPropagation(); // Prevent double click event on the button from bubbling if user clicks fast
+          onAddTodo();
+        }}
         className="
           mt-3
           bg-blue-600
