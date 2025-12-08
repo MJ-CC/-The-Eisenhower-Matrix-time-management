@@ -59,14 +59,14 @@ function App() {
     return items[containerId].find((item) => item.id === activeId) || null;
   }, [activeId, findContainer, items]);
 
-  const handleAddTodo = useCallback(() => {
+  const handleAddTodo = useCallback((targetContainer: QuadrantId | 'unassigned' = 'unassigned') => {
     const newItem: TodoItem = {
       id: `todo-${nextId}`,
       text: '新待辦事項',
     };
     setItems((prev) => ({
       ...prev,
-      unassigned: [...prev.unassigned, newItem],
+      [targetContainer]: [...prev[targetContainer], newItem],
     }));
     setNextId((prev) => prev + 1);
   }, [nextId]);
@@ -176,6 +176,7 @@ function App() {
               items={items[QuadrantId.URGENT_IMPORTANT]}
               onDelete={handleDeleteTodo}
               onUpdate={handleUpdateTodo}
+              onAddTodo={() => handleAddTodo(QuadrantId.URGENT_IMPORTANT)}
               colorClass="border-red-500 bg-red-50 dark:bg-red-950"
               headerClass="bg-red-500 text-white"
             />
@@ -186,6 +187,7 @@ function App() {
               items={items[QuadrantId.NOT_URGENT_IMPORTANT]}
               onDelete={handleDeleteTodo}
               onUpdate={handleUpdateTodo}
+              onAddTodo={() => handleAddTodo(QuadrantId.NOT_URGENT_IMPORTANT)}
               colorClass="border-green-500 bg-green-50 dark:bg-green-950"
               headerClass="bg-green-500 text-white"
             />
@@ -196,6 +198,7 @@ function App() {
               items={items[QuadrantId.URGENT_NOT_IMPORTANT]}
               onDelete={handleDeleteTodo}
               onUpdate={handleUpdateTodo}
+              onAddTodo={() => handleAddTodo(QuadrantId.URGENT_NOT_IMPORTANT)}
               colorClass="border-yellow-500 bg-yellow-50 dark:bg-yellow-950"
               headerClass="bg-yellow-500 text-gray-800"
             />
@@ -206,6 +209,7 @@ function App() {
               items={items[QuadrantId.NOT_URGENT_NOT_IMPORTANT]}
               onDelete={handleDeleteTodo}
               onUpdate={handleUpdateTodo}
+              onAddTodo={() => handleAddTodo(QuadrantId.NOT_URGENT_NOT_IMPORTANT)}
               colorClass="border-gray-400 bg-gray-50 dark:bg-gray-700"
               headerClass="bg-gray-400 text-white"
             />
@@ -216,7 +220,7 @@ function App() {
         <div className="lg:w-1/3 w-full h-full">
           <TodoListPanel
             items={items.unassigned}
-            onAddTodo={handleAddTodo}
+            onAddTodo={() => handleAddTodo('unassigned')}
             onDelete={handleDeleteTodo}
             onUpdate={handleUpdateTodo}
           />
