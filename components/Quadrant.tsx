@@ -15,6 +15,7 @@ interface QuadrantProps {
   onAddTodo: () => void;
   colorClass: string;
   headerClass: string;
+  newlyAddedId?: string | null;
 }
 
 export const Quadrant: React.FC<QuadrantProps> = ({
@@ -27,6 +28,7 @@ export const Quadrant: React.FC<QuadrantProps> = ({
   onAddTodo,
   colorClass,
   headerClass,
+  newlyAddedId,
 }) => {
   // Logic for Dropping items INTO the Quadrant
   const { setNodeRef, isOver } = useDroppable({
@@ -69,13 +71,16 @@ export const Quadrant: React.FC<QuadrantProps> = ({
               key={item.id} 
               item={item} 
               onDelete={onDelete} 
-              onUpdate={onUpdate} 
+              onUpdate={onUpdate}
+              autoEdit={item.id === newlyAddedId} 
             />
           ))}
         </SortableContext>
         {items.length === 0 && (
-          <div className="flex-grow flex items-center justify-center border-2 border-dashed border-gray-400 dark:border-gray-500 rounded-lg m-1 min-h-[60px] opacity-60 hover:opacity-100 transition-opacity cursor-pointer">
-            <span className="text-gray-500 dark:text-gray-400 text-xs select-none">拖曳待辦事項到這裡或雙擊新增</span>
+          <div className="flex-grow flex flex-col items-center justify-center border-2 border-dashed border-gray-400 dark:border-gray-500 rounded-lg m-1 min-h-[60px] opacity-60 hover:opacity-100 transition-opacity cursor-pointer space-y-1">
+            <span className="text-gray-500 dark:text-gray-400 text-xs select-none">拖曳待辦事項到這裡</span>
+            <span className="text-gray-500 dark:text-gray-400 text-xs select-none">或</span>
+            <span className="text-gray-500 dark:text-gray-400 text-xs select-none">雙擊空白處新增</span>
           </div>
         )}
       </div>
