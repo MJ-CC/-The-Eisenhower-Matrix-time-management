@@ -1,5 +1,5 @@
 
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import {
   DndContext,
   DragEndEvent,
@@ -20,18 +20,55 @@ import { Quadrant } from './components/Quadrant';
 import { TodoListPanel } from './components/TodoListPanel';
 import { TodoCard } from './components/TodoCard';
 
+const STORAGE_KEY_ITEMS = 'time-matrix-items';
+const STORAGE_KEY_NEXT_ID = 'time-matrix-next-id';
+
 function App() {
-  const [items, setItems] = useState<ItemsState>({
-    [QuadrantId.URGENT_IMPORTANT]: [],
-    [QuadrantId.NOT_URGENT_IMPORTANT]: [],
-    [QuadrantId.URGENT_NOT_IMPORTANT]: [],
-    [QuadrantId.NOT_URGENT_NOT_IMPORTANT]: [],
-    unassigned: [],
+  // Initialize items from localStorage or use default empty state
+  const [items, setItems] = useState<ItemsState>(() => {
+    try {
+      const savedItems = localStorage.getItem(STORAGE_KEY_ITEMS);
+      if (savedItems) {
+        return JSON.parse(savedItems);
+      }
+    } catch (error) {
+      console.error('Failed to parse items from local storage:', error);
+    }
+    return {
+      [QuadrantId.URGENT_IMPORTANT]: [],
+      [QuadrantId.NOT_URGENT_IMPORTANT]: [],
+      [QuadrantId.URGENT_NOT_IMPORTANT]: [],
+      [QuadrantId.NOT_URGENT_NOT_IMPORTANT]: [],
+      unassigned: [],
+    };
   });
-  const [nextId, setNextId] = useState(1); 
+
+  // Initialize nextId from localStorage to prevent ID collisions after reload
+  const [nextId, setNextId] = useState(() => {
+    try {
+      const savedId = localStorage.getItem(STORAGE_KEY_NEXT_ID);
+      if (savedId) {
+        return parseInt(savedId, 10);
+      }
+    } catch (error) {
+      console.error('Failed to parse nextId from local storage:', error);
+    }
+    return 1;
+  });
+
   const [activeId, setActiveId] = useState<string | null>(null);
   // Track the ID of the newly added item to trigger auto-edit
   const [newlyAddedId, setNewlyAddedId] = useState<string | null>(null);
+
+  // Persist items to localStorage whenever they change
+  useEffect(() => {
+    localStorage.setItem(STORAGE_KEY_ITEMS, JSON.stringify(items));
+  }, [items]);
+
+  // Persist nextId to localStorage whenever it changes
+  useEffect(() => {
+    localStorage.setItem(STORAGE_KEY_NEXT_ID, nextId.toString());
+  }, [nextId]);
 
   const sensors = useSensors(
     useSensor(PointerSensor, {
